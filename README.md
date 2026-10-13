@@ -6,6 +6,8 @@ Dashboard monitoring **lengkap, interaktif, dan mandiri (single file)** yang dib
 
 Buka file **`dashboard.html`** (klik dua kali) — tidak butuh internet, server, atau instalasi apa pun. Semua data & grafik sudah tertanam di dalamnya.
 
+Tersedia juga versi spreadsheet: **`Monitoring_Dashboard.xlsx`** (8 sheet + 9 grafik native Excel).
+
 ---
 
 ## 1. Isi Dashboard (9 bagian)
@@ -50,6 +52,7 @@ Kebutuhan: `python3` + `openpyxl` (`pip install --trusted-host pypi.org --truste
 
 ```
 ├── dashboard.html              # ← DASHBOARD (buka ini), single file mandiri
+├── Monitoring_Dashboard.xlsx   # ← versi spreadsheet (8 sheet + grafik)
 ├── data/dashboard_data.json    # data agregat (sumber untuk dashboard)
 ├── dashboard_template.html     # template HTML/CSS
 ├── app.js                      # logika dashboard (Chart.js)
@@ -58,6 +61,7 @@ Kebutuhan: `python3` + `openpyxl` (`pip install --trusted-host pypi.org --truste
 │   ├── fetch_sheet.sh          # unduh workbook Google Sheet
 │   ├── etl.py                  # ekstraksi & agregasi seluruh sheet
 │   ├── build.py                # gabung template + data + chart.js + app.js
+│   ├── build_xlsx.py           # bikin Monitoring_Dashboard.xlsx
 │   └── run_all.sh              # alur lengkap
 └── README.md
 ```
