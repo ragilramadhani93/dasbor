@@ -1,0 +1,4 @@
+sheet.xlsx
+extract/
+*.pyc
+__pycache__/
