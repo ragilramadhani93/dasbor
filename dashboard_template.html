@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard Monitoring KACC</title>
+<script>/*__CHARTJS__*/</script>
+<style>
+:root{
+  --bg:#f4f6fb; --card:#ffffff; --ink:#1b2333; --muted:#6b7a90; --line:#e6ebf2;
+  --brand:#0f6f5c; --brand2:#12946f; --accent:#2563eb; --warn:#f59e0b; --bad:#dc2626; --good:#16a34a;
+  --side:#0b2f2a; --sideink:#d7ece7;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+a{color:var(--accent)}
+.app{display:flex;min-height:100vh}
+.side{width:236px;background:var(--side);color:var(--sideink);position:fixed;top:0;bottom:0;left:0;overflow:auto;padding:18px 0}
+.side h1{font-size:15px;margin:0 18px 4px;color:#fff;letter-spacing:.3px}
+.side .sub{font-size:11px;color:#8fc4b6;margin:0 18px 16px}
+.nav a{display:block;padding:10px 18px;color:var(--sideink);text-decoration:none;font-size:13px;border-left:3px solid transparent;cursor:pointer}
+.nav a:hover{background:rgba(255,255,255,.06)}
+.nav a.active{background:rgba(255,255,255,.10);border-left-color:var(--brand2);color:#fff;font-weight:600}
+.main{margin-left:236px;flex:1;padding:18px 22px 60px;max-width:100%}
+.topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.topbar h2{margin:0;font-size:20px}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}
+.badge.g{background:#e7f6ee;color:var(--good)} .badge.w{background:#fef3e2;color:#b45309} .badge.b{background:#fdeaea;color:var(--bad)} .badge.n{background:#eef2f7;color:var(--muted)}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:16px}
+.filters label{font-size:12px;color:var(--muted);display:block;margin-bottom:2px}
+select,input[type=text]{padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;font-size:13px;color:var(--ink);min-width:150px}
+.btn{padding:7px 12px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer;font-size:12px}
+.btn:hover{background:#f0f4f9}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(16,32,60,.03)}
+.card h3{margin:0 0 10px;font-size:14px;font-weight:700}
+.card h3 small{font-weight:400;color:var(--muted);font-size:11px;margin-left:6px}
+.kpi .label{font-size:12px;color:var(--muted)}
+.kpi .val{font-size:22px;font-weight:800;margin:4px 0 2px;letter-spacing:-.3px}
+.kpi .sub{font-size:12px;color:var(--muted)}
+.kpi .bar{height:6px;border-radius:4px;background:#eef2f7;margin-top:8px;overflow:hidden}
+.kpi .bar>span{display:block;height:100%;border-radius:4px}
+.chart-wrap{position:relative;height:280px}
+.chart-wrap.sm{height:230px}
+.chart-wrap.lg{height:340px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:600;cursor:pointer;user-select:none;position:sticky;top:0;background:#fff}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:hover{background:#f7fafc}
+.tbl-wrap{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:700}
+.pill.g{background:#e7f6ee;color:var(--good)}.pill.w{background:#fef3e2;color:#b45309}.pill.b{background:#fdeaea;color:var(--bad)}.pill.n{background:#eef2f7;color:var(--muted)}
+.note{font-size:12px;color:var(--muted);line-height:1.5}
+.empty{padding:22px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:10px;background:#fbfdff}
+.section{display:none}.section.active{display:block}
+.sect-title{margin:2px 0 12px;font-size:16px}
+.sect-title small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:3px}
+ul.issues{margin:6px 0 0;padding-left:18px;line-height:1.7;font-size:13px}
+.footer{margin-top:26px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.legend-note{font-size:11.5px;color:var(--muted);margin-top:8px}
+@media print{.side,.filters,.btn{display:none}.main{margin:0}.section{display:block!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <h1>KACC Monitoring</h1>
+    <div class="sub">Dashboard Operasional &amp; Penjualan</div>
+    <nav class="nav" id="nav">
+      <a data-tab="ringkasan" class="active">Ringkasan Eksekutif</a>
+      <a data-tab="outlet">Performa Outlet</a>
+      <a data-tab="tren">Tren Penjualan</a>
+      <a data-tab="produk">Produk &amp; Kategori</a>
+      <a data-tab="snack">Snack / Roti &amp; Pastry</a>
+      <a data-tab="inventori">Inventori &amp; Stok</a>
+      <a data-tab="bahan">Bahan Baku &amp; BOM</a>
+      <a data-tab="logistik">Logistik &amp; Log Operasional</a>
+      <a data-tab="kualitas">Kualitas Data</a>
+    </nav>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h2>Dashboard Monitoring</h2>
+        <div class="note" id="metaLine"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="badge n" id="srcBadge">Sumber: Google Sheet</span>
+        <button class="btn" onclick="window.print()">Cetak / PDF</button>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div><label>Area</label><select id="fArea"></select></div>
+      <div><label>Bulan (tren/produk)</label><select id="fMonth"></select></div>
+      <div><label>Cari outlet</label><input type="text" id="fSearch" placeholder="nama outlet..."></div>
+      <button class="btn" id="btnReset">Reset</button>
+    </div>
+
+    <section class="section active" id="tab-ringkasan"></section>
+    <section class="section" id="tab-outlet"></section>
+    <section class="section" id="tab-tren"></section>
+    <section class="section" id="tab-produk"></section>
+    <section class="section" id="tab-snack"></section>
+    <section class="section" id="tab-inventori"></section>
+    <section class="section" id="tab-bahan"></section>
+    <section class="section" id="tab-logistik"></section>
+    <section class="section" id="tab-kualitas"></section>
+
+    <div class="footer" id="footer"></div>
+  </main>
+</div>
+<script>window.DASH = /*__DASHBOARD_DATA__*/;</script>
+<script>
+/*__APPJS__*/
+</script>
+</body>
+</html>

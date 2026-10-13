@@ -52,7 +52,7 @@ def main():
         if row is None or row[1] is None: continue
         area = str(row[0]).strip() if row[0] else ''
         outlet = str(row[1]).strip()
-        days_raw = str(row[2]).strip() if row[2] else ''
+        days_raw = str(row[2]).strip() if len(row) > 2 and row[2] else ''
         days = [d.strip() for d in re.split(r'[,;]', days_raw) if d.strip()]
         delivery.append({'area': area, 'outlet': outlet, 'daysRaw': days_raw, 'days': days})
         outlet_area[outlet.upper()] = area

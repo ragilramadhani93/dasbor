@@ -1,4 +1,8 @@
 sheet.xlsx
 extract/
+node_modules/
+package.json
+package-lock.json
 *.pyc
 __pycache__/
+etl.log
